@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Update User</h1>
+        <form method="POST">
+            <input type="text" name="fname" value="{{ user.fname }}" required>
+            <input type="text" name="lname" value="{{ user.lname }}" required>
+            <input type="email" name="email" value="{{ user.email }}" required>
+            <input type="text" name="phone" value="{{ user.phone }}" required>
+            <button type="submit">Update</button>
+        </form>
+        <a href="/">Back to Home</a>
+    </div>
+</body>
+</html>
