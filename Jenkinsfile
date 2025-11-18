@@ -16,5 +16,10 @@ pipeline {
                 echo 'Deploying....'
             }
         }
+        post {
+    always {
+        echo 'Post-build actions executed.'
+    }
+}
     }
 }
