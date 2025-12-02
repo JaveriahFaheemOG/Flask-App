@@ -63,5 +63,7 @@ def delete_user(sno):
 
 if __name__ == '__main__':
     with app.app_context():
+        print("Making changes through the other cloned directory..")
         db.create_all()
     app.run(debug=True)
+  
