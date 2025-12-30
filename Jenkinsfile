@@ -1,53 +1,40 @@
 pipeline {
-
     agent any
-
-    // Global environment variables
-    environment {
-        VERSION = "1.0"
-    }
-
-    // Tools (Make sure Maven name matches Jenkins → Manage Jenkins → Tools)
-    tools {
-        maven 'Maven3'
-    }
-
-    // Build parameters
-    parameters {
-        booleanParam(name: 'executeTests', defaultValue: true, description: 'Run Test Stage?')
-    }
 
     stages {
 
-        stage('Build') {
+        stage('Clone Repository') {
             steps {
-                echo "Building version ${VERSION}"
-
-                // Check Maven installation
-                // Use "bat" instead of "sh" if you are on Windows
-                sh "mvn --version"
+                git branch: 'main',
+                url: 'https://github.com/JaveriahFaheemOG/Flask-App.git'
             }
         }
 
-        stage('Test') {
-            when {
-                expression { params.executeTests == true }
-            }
+        stage('Install Dependencies') {
             steps {
-                echo "Running tests for version ${VERSION}"
+                sh 'python -m pip install --upgrade pip'
+                sh 'pip install -r requirements.txt'
             }
         }
 
-        stage('Deploy') {
+        stage('Run Unit Tests') {
             steps {
-                echo "Deploying version ${VERSION}"
+                sh 'pytest'
             }
         }
-    }
 
-    post {
-        always {
-            echo "Post-build actions executed."
+        stage('Build Application') {
+            steps {
+                sh 'mkdir -p build'
+                sh 'cp -r . build/'
+            }
+        }
+
+        stage('Deploy Application') {
+            steps {
+                sh 'mkdir -p /tmp/flask-deploy'
+                sh 'cp -r build/* /tmp/flask-deploy/'
+            }
         }
     }
 }
